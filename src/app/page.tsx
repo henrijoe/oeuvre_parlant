@@ -237,12 +237,6 @@ const HomePage = () => {
                 </div>
             )}
 
-            {/* {loading && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
-                </div>
-            )} */}
-
             <div className="container-fluid relative px-3">
                 <div className="layout-specing">
                     <div className="md:flex justify-between items-center">
@@ -295,15 +289,6 @@ const HomePage = () => {
                                             )}
                                         </div>
 
-                                        {/* Bouton overlay sur l'image */}
-
-                                        <div className="absolute -bottom-20 group-hover:bottom-3 start-3 end-3 duration-500">
-                                            <AddToCartButton
-                                                product={item}
-                                                className="w-full"
-                                            />
-                                        </div>
-
                                         {/* Actions droites (hover) */}
                                         <ul className="list-none absolute top-4 right-4 opacity-0 group-hover:opacity-100 duration-300">
                                             <li>
@@ -326,22 +311,22 @@ const HomePage = () => {
 
                                             {/* {isAdmin && (
                                                 <> */}
-                                                    <li className="mt-1">
-                                                        <button
-                                                            onClick={() => openDeleteModal(item.id)}
-                                                            disabled={deletingId === item.id}
-                                                            className="size-8 inline-flex items-center justify-center rounded-full bg-red-600 hover:bg-red-700 border border-red-600 text-white transition-colors disabled:bg-red-400 disabled:cursor-not-allowed"
-                                                            title="Supprimer"
-                                                        >
-                                                            {deletingId === item.id ? (
-                                                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                                                            ) : (
-                                                                <i className="mdi mdi-delete-outline"></i>
-                                                            )}
-                                                        </button>
+                                            <li className="mt-1">
+                                                <button
+                                                    onClick={() => openDeleteModal(item.id)}
+                                                    disabled={deletingId === item.id}
+                                                    className="size-8 inline-flex items-center justify-center rounded-full bg-red-600 hover:bg-red-700 border border-red-600 text-white transition-colors disabled:bg-red-400 disabled:cursor-not-allowed"
+                                                    title="Supprimer"
+                                                >
+                                                    {deletingId === item.id ? (
+                                                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                                                    ) : (
+                                                        <i className="mdi mdi-delete-outline"></i>
+                                                    )}
+                                                </button>
 
-                                                    </li>
-                                                {/* </>)} */}
+                                            </li>
+                                            {/* </>)} */}
 
                                             <li className="mt-1">
                                                 <Link
@@ -353,14 +338,6 @@ const HomePage = () => {
                                                 </Link>
                                             </li>
 
-                                            {/* <li className="mt-1">
-                                            <button
-                                                className="size-8 inline-flex items-center justify-center rounded-full bg-indigo-600 hover:bg-indigo-700 border border-indigo-600 text-white"
-                                                title="Sauvegarder"
-                                            >
-                                                <i className="mdi mdi-bookmark-outline"></i>
-                                            </button>
-                                        </li> */}
                                         </ul>
 
                                         {/* Badge gauche */}
@@ -376,6 +353,7 @@ const HomePage = () => {
                                     {/* 1/4 : Infos (nom, auteur, prix, whatsapp, localisation) */}
                                     <div className="p-3 flex flex-col justify-between border-t border-gray-100 dark:border-gray-700">
                                         {/* Ligne nom + prix */}
+
                                         <div className="flex items-start justify-between gap-3">
                                             <Link
                                                 href={`/shop-item-detail/${item.id}`}
@@ -408,15 +386,28 @@ const HomePage = () => {
                                             </div>
 
                                             <a
-                                                href={waHref(item.whatsapp)}
+                                                href={waHref(item?.whatsapp, item)}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[12px] hover:bg-emerald-600 hover:text-white transition"
-                                                title="Contacter sur WhatsApp"
+                                                title="Contacter sur WhatsApp à propos de cette œuvre"
+                                                onClick={(e) => {
+                                                    if (!item.whatsapp) {
+                                                        e.preventDefault();
+                                                        showAlert('danger', 'Numéro WhatsApp non disponible !');
+                                                    }
+                                                }}
                                             >
                                                 <i className="mdi mdi-whatsapp text-[16px]"></i>
                                                 <span className="hidden sm:inline">{prettyPhone(item.whatsapp)}</span>
                                             </a>
+                                        </div>
+
+                                        <div className="mt-3">
+                                            <AddToCartButton
+                                                product={item}
+                                                className="w-full"
+                                            />
                                         </div>
                                     </div>
                                 </div>
@@ -430,46 +421,6 @@ const HomePage = () => {
                         )}
                     </div>
 
-                    {/* Pagination */}
-                    {/*                     
-                    <div className="flex justify-end mt-6">
-                        <nav aria-label="Page navigation example">
-                            <ul className="inline-flex items-center -space-x-px">
-                                <li>
-                                    <Link
-                                        href="#"
-                                        className="size-[40px] inline-flex justify-center items-center text-slate-400 bg-white dark:bg-slate-900 rounded-s-lg hover:text-white border border-gray-100 dark:border-gray-700 hover:border-indigo-600 dark:hover:border-indigo-600 hover:bg-indigo-600 dark:hover:bg-indigo-600"
-                                    >
-                                        <MdKeyboardArrowLeft className="text-[20px] rtl:rotate-180 rtl:-mt-1" />
-                                    </Link>
-                                </li>
-                                {[1, 2, 3, 4].map((p) => (
-                                    <li key={p}>
-                                        <Link
-                                            href="#"
-                                            aria-current={p === 3 ? "page" : undefined}
-                                            className={[
-                                                "size-[40px] inline-flex justify-center items-center border",
-                                                p === 3
-                                                    ? "z-10 text-white bg-indigo-600 border-indigo-600"
-                                                    : "text-slate-400 hover:text-white bg-white dark:bg-slate-900 border-gray-100 dark:border-gray-700 hover:border-indigo-600 dark:hover:border-indigo-600 hover:bg-indigo-600 dark:hover:bg-indigo-600",
-                                            ].join(" ")}
-                                        >
-                                            {p}
-                                        </Link>
-                                    </li>
-                                ))}
-                                <li>
-                                    <Link
-                                        href="#"
-                                        className="size-[40px] inline-flex justify-center items-center text-slate-400 bg-white dark:bg-slate-900 rounded-e-lg hover:text-white border border-gray-100 dark:border-gray-700 hover:border-indigo-600 dark:hover:border-indigo-600 hover:bg-indigo-600 dark:hover:bg-indigo-600"
-                                    >
-                                        <MdKeyboardArrowRight className="text-[20px] rtl:rotate-180 rtl:-mt-1" />
-                                    </Link>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div> */}
 
                     {totalPages > 1 && (
                         <div className="flex justify-end mt-6">
