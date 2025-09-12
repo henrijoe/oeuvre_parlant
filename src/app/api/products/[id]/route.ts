@@ -1,4 +1,3 @@
-// app/api/products/[id]/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 import formidable from 'formidable';
@@ -7,49 +6,21 @@ import path from 'path';
 
 const prisma = new PrismaClient();
 
-// export async function GET(
-//   request: NextRequest,
-//   { params }: { params: { id: string } }
-// ) {
-//   try {
-//     const product = await prisma.product.findUnique({
-//       where: { id: parseInt(params.id) }
-//     });
-
-//     if (!product) {
-//       return NextResponse.json(
-//         { error: 'Product not found' },
-//         { status: 404 }
-//       );
-//     }
-
-//     return NextResponse.json(product);
-//   } catch (error) {
-//     console.error('Error fetching product:', error);
-//     return NextResponse.json(
-//       { error: 'Internal server error' },
-//       { status: 500 }
-//     );
-//   }
-// }
-
+// GET - Récupérer un produit spécifique
 export async function GET(
-  // request: NextRequest,
-  { params }: { params: Promise<{ id: string }> } // ← Ajouter Promise
+  _request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params; // ← Attendre les params
+    const { id } = await params;
     const productId = parseInt(id);
-    
-    const product = await prisma.product.findUnique({
-      where: { id: productId }
+
+    const product = await prisma.product.findUnique({ 
+      where: { id: productId } 
     });
 
     if (!product) {
-      return NextResponse.json(
-        { error: 'Product not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Product not found' }, { status: 404 });
     }
 
     return NextResponse.json(product);
@@ -62,16 +33,14 @@ export async function GET(
   }
 }
 
-
-
+// PUT - Mettre à jour un produit
 export async function PUT(
   request: NextRequest,
-  // { params }: { params: { id: string } }
-  context: { params: Promise<{ id: string }> } // ← Ajoutez Promise
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const params = await context.params; // ← Await the params
-    const productId = parseInt(params.id);
+    const { id } = await params;
+    const productId = parseInt(id);
     const formData = await request.formData();
     const file = formData.get('image') as File;
     const name = formData.get('name') as string;
@@ -150,19 +119,10 @@ export async function PUT(
   }
 }
 
-/**
- * 
- * @param request 
- * @param param1 
- * @returns 
- */
-
+// DELETE - Supprimer un produit
 export async function DELETE(
-  // request: NextRequest,
-  // { params }: { params: { id: string } }
-    // context: { params: Promise<{ id: string }> } // ← Ajoutez Promise
-  { params }: { params: Promise<{ id: string }> } // ← Ajouter Promise
-
+  _request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;

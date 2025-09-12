@@ -7,10 +7,10 @@ import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 import { AiOutlineLineChart } from "react-icons/ai";
 import { PiBrowsersBold } from "react-icons/pi";
-import { Sidebar } from "../sidebar";
 import Topnav from "../topnav";
 import TopNavbar from "../top-navbar";
 import { IMenuItem } from "../sidebar/sidebar-content";
+import { Sidebar } from "../../components/sidebar/index";
 
 const SideBarWrapper = (props: React.PropsWithChildren) => {
   let [toggle, setToggle] = useState(true);

@@ -12,7 +12,6 @@ import { useEffect, useState } from "react";
 import { IProduct } from "@/lib/redux/productsSlice";
 
 
-
 export default function Page() {
 
 
@@ -24,6 +23,12 @@ export default function Page() {
 
     // Trouver le produit correspondant à l'ID
     // const art = products.find((p) => p.id === item);
+
+    // Fonction pour obtenir l'URL de l'image en toute sécurité
+    const getImageSrc = (product: IProduct | null) => {
+        if (!product) return '/images/default-image.jpg';
+        return product.imagePath || product.image || '/images/default-image.jpg';
+    };
 
     // Trouver le produit correspondant à l'ID
     useEffect(() => {
@@ -137,8 +142,16 @@ export default function Page() {
                             {/* Image de l'œuvre */}
                             <div className="xl:col-span-4 lg:col-span-5 md:col-span-6">
                                 <div className="relative w-full h-96">
-                                    <Image
+                                    {/* <Image
                                         src={product.image}
+                                        alt={product.name}
+                                        fill
+                                        className="object-contain rounded-md shadow-sm dark:shadow-gray-800"
+                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                    /> */}
+
+                                    <Image
+                                        src={getImageSrc(product)}
                                         alt={product.name}
                                         fill
                                         className="object-contain rounded-md shadow-sm dark:shadow-gray-800"

@@ -6,7 +6,7 @@ import storage from 'redux-persist/lib/storage';
 export interface IProduct {
   id: number;
   uuid: string;
-  image: string;
+  image?: string;
   imagePath?: string;
   name: string;
   price?: number;

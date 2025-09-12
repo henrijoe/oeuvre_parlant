@@ -28,26 +28,31 @@ export async function GET(request: NextRequest) {
     const skip = (page - 1) * limit;
 
     console.log('🔍 Fetching products from database...');
-    
+
     // Compter le nombre total de produits
     const totalProducts = await prisma.product.count();
-    
+
     // Récupérer les produits avec pagination
     const products = await prisma.product.findMany({
       skip,
       take: limit,
       orderBy: { createdAt: 'desc' }
     });
-    
+
     console.log(`✅ Found ${products.length} products out of ${totalProducts}`);
-    
+
     const totalPages = Math.ceil(totalProducts / limit);
-    
-    const productsWithImage = products.map((product:IProduct) => ({
+
+    // const productsWithImage = products.map((product:IProduct) => ({
+    //   ...product,
+    //   image: product.imagePath || '/images/default-image.jpg'
+    // }));
+
+    const productsWithImage = products.map((product) => ({
       ...product,
-      image: product.imagePath || '/images/default-image.jpg'
+      image: product.imagePath ?? '/images/default-image.jpg', // null -> string
     }));
-    
+
     // Retourner avec pagination
     return NextResponse.json({
       products: productsWithImage,
@@ -124,11 +129,11 @@ export async function POST(request: NextRequest) {
         name,
         price,
         oldPrice: price * 1.2, // 20% de plus que le prix actuel
-        author: author || "Artiste inconnu",
-        location: location || "Non spécifié",
-        whatsapp: whatsapp || "",
-        category: category || 'Art & Craft',
-        description: description || "",
+        author: author ??"Artiste inconnu",
+        location: location ?? "Non spécifié",
+        whatsapp: whatsapp ?? "",
+        category: category ?? 'Art & Craft',
+        description: description ?? "",
         imagePath: `/uploads/${fileName}`
       }
     });

@@ -5,13 +5,18 @@ import dynamic from "next/dynamic";
 
 const Editer = dynamic(()=>import('./editer'),{ssr:false})
 
-import { inboxData } from "../data/data";
 import { BiPlus } from "react-icons/bi";
 import { AiOutlineClose, AiOutlineDelete, AiOutlineInbox } from "react-icons/ai";
 import {TbMailStar, TbMailUp, } from 'react-icons/tb'
 import {RiMailSendLine} from 'react-icons/ri'
 import { LuMailPlus } from "react-icons/lu";
 import { MdOutlineEventNote } from "react-icons/md";
+
+const inboxData = [
+    {
+        name: "Calvin Carlo", 
+        time: "10:30 AM", star: true,
+        subject: "New product launch - 'Artisan's Delight' 🎨",}]
 
 export default function Mail(){
     let [composeModal, setComposeModal] = useState(false)
