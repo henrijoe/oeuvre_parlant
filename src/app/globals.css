@@ -1,0 +1,8 @@
+/** @format */
+
+@import "tailwindcss";
+@import "../assets/css/tailwind.css";
+@import "../assets/css/animations.css";
+@import "../assets/css/materialdesignicons.min.css";
+@import "simplebar-react/dist/simplebar.min.css";
+
